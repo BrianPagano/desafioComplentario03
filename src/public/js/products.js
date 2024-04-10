@@ -58,26 +58,27 @@ document.querySelectorAll('.botonAgregarCarrito').forEach(function(button) {
         method: 'POST',
     })
     .then(response => response.json())
-    .then(data => {
-        console.log(data)
+     .then(responseData => {
+      // Maneja la respuesta del servidor
+      if (responseData.status === 'Success') { // Verifica si el inicio de sesión fue exitoso
         const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 1000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        })
-  
-        Toast.fire({
-            icon: 'success',
-            title: `Producto agregado correctamente`,
-        })
-    })
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 1000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+      })
+      Toast.fire({
+          icon: 'success',
+          title: `Producto agregado correctamente`,
+      })
+      } 
+  })
     .catch(error => {
-        console.error('Error al cancelar la compra:', error)
+        console.error('Error al agregar un producto:', error)
     })
   }

@@ -71,7 +71,7 @@ router.post('/', async (req, res) => {
 })
 
 //agregar producto indicando el carrito (cid) y el producto (pid)
-router.post('/:cid/products/:pid', authorization('user'), async (req, res, next) => {
+router.post('/:cid/products/:pid', authorization(['user', 'premium']), async (req, res, next) => {
     try {
         const { cid, pid } = req.params
         const product = await ProductsService.getProductByID(pid)
@@ -85,11 +85,14 @@ router.post('/:cid/products/:pid', authorization('user'), async (req, res, next)
             })
         }
 
+        if (product.owner === req.session.user.email) {
+            return res.status(401).json({ error: 'bad request'})
+        }
         const result = await CartService.addProductInCart(cid, pid)
         if (result.success) {
             // Actualizar el valor de user.cart en la sesión del usuario
             req.session.user.cart = cid
-            res.status(201).json({ message: result.message })
+            res.status(201).json({status: 'Success', message: result.message })
         } else {
             CustomError.createError({
                 name: TYPES_ERROR.INTERNAL_SERVER_ERROR,
@@ -138,7 +141,7 @@ router.post('/:cid/purchase', async (req, res) => {
 })
 
 //actualizar producto pasando el cid y pid
-router.put('/:cid/products/:pid', authorization('user'), async (req, res) => {
+router.put('/:cid/products/:pid', authorization(['user', 'premium']), async (req, res) => {
     try {
         const { cid, pid } = req.params
         const { quantity } = req.body
@@ -159,7 +162,7 @@ router.put('/:cid/products/:pid', authorization('user'), async (req, res) => {
 
 
 //borrar un solo producto del carrito enviando por parametros el cid y pid
-router.delete('/:cid/products/:pid', authorization('user'), async (req, res) => {
+router.delete('/:cid/products/:pid', authorization(['user', 'premium']), async (req, res) => {
     try {
         const { cid, pid } = req.params
         const result = await CartService.deleteProductInCart(cid, pid)
@@ -176,7 +179,7 @@ router.delete('/:cid/products/:pid', authorization('user'), async (req, res) => 
 })
 
 //delete de todos los productos del carrito
-router.delete('/:cid', authorization('user'), async (req, res) => {
+router.delete('/:cid', authorization(['user', 'premium']), async (req, res) => {
     try {
         const { cid } = req.params
         const result = await CartService.deleteProductsInCart(cid)
