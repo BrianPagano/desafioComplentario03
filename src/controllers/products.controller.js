@@ -79,7 +79,7 @@ router.get('/:pid', async (req, res) => {
     }
 })
 
-router.post("/", authorization('admin'), async (req, res, next) => {
+router.post("/", async (req, res, next) => {
     try {
       const { code, description, price, stock, thumbnail, title, category } = req.body
 
@@ -90,10 +90,22 @@ router.post("/", authorization('admin'), async (req, res, next) => {
             message: 'Error al crear el producto',
             code: EErrors.PRODUCT_CREATION_ERROR,
         })
+        return
     }
+      if (req.session.user.role === 'premium') {
+         const owner = req.session.user.email
+         console.log (owner)
+         const result = await ProductsService.addProduct({code,description,price,stock,thumbnail,title,category,owner})
+         if (result.success) {
+           res.status(201).json({ message: "Producto creado por usuario premium correctamente" })
+         } else {
+           res.status(400).json({ error: result.message })
+         }
+         return
+      } 
       const result = await ProductsService.addProduct({code,description,price,stock,thumbnail,title,category})
       if (result.success) {
-        res.status(201).json({ message: "Producto creado correctamente" })
+        res.status(201).json({ message: "Producto creado por admin correctamente" })
       } else {
         res.status(400).json({ error: result.message })
       }

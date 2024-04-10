@@ -2,7 +2,7 @@ const { Router } = require('express')
 const router = Router()
 const authorization = require('../middlewares/authorization-middleware')
 
-router.get('/', authorization('admin'), async (req, res) => {
+router.get('/', authorization(['admin', 'premium']), async (req, res) => {
     try {
      const { user } = req.session
      res.render ('addProduct', {

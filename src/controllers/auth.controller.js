@@ -80,7 +80,7 @@ router.post('/forgotPassword', async (req, res) => {
 
         res.status(200).json({ status: 'Success', message: 'Password Updated' });
     } catch (error) {
-        req.logger.error('Error:', error);
+        req.logger.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 })

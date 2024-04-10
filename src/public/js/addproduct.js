@@ -1,5 +1,6 @@
 function submitForm() {
     // Recopila los datos del formulario en un objeto
+
     const formData = {
         title: document.getElementById('title').value,
         description: document.getElementById('description').value,

@@ -15,6 +15,10 @@ const productsSchema = new mongoose.Schema({
     stock: Number,
     status: Boolean,
     category: String,
+    owner: {
+        type:String,
+        default: 'admin'
+    },
 })
 
 //ponemos el plugin de Paginacion
