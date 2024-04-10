@@ -22,7 +22,7 @@ function submitForm() {
         if (responseData.status === 'Success') { // Verifica si devuelve success
             window.location.href = '/login' // Redirecciona solo si fue exitoso el reset
         } else {
-            console.log("Error al restaurar la clave")
+            console.log("Error al restaurar la clave, no puede ser la misma que antes")
             Swal.fire({
                 icon: "error",
                 title: "Oops...",

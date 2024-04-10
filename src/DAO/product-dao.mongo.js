@@ -57,6 +57,7 @@ class ProductDao {
         const idExist = await Products.updateOne({ _id: id }, { $set: { status: false } })
         if (idExist) {
           console.log("Producto borrado correctamente")}
+          return  { success: true }
       } catch (error) {
         console.error("Error al borrar el producto:", error.message)
         return false

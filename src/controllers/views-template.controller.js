@@ -2,6 +2,7 @@ const { Router } = require('express')
 const authMiddleware = require('../middlewares/private-acces-middleware')
 const publicAcces = require('../middlewares/public-acces-middleware')
 const { authTokenMiddleware } = require('../utils/jwt.util')
+const authorization = require('../middlewares/authorization-middleware')
 
 const router = Router()
 
@@ -64,6 +65,30 @@ router.get ('/loggerTest', async (req,res) => {
         req.logger.error ('Error en el loggerTest:', error)
         res.status(500).json({ error: 'Internal Server Error' })
     }  
+})
+
+router.get('/addProduct', authorization(['admin', 'premium']), async (req, res) => {
+    try {
+     const { user } = req.session
+     res.render ('addProduct', {
+        user,
+        style:'style.css'})   
+    } catch (error) {
+        req.logger.error ('Error al crear productos:', error)
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
+})
+
+router.get('/deleteProduct', authorization(['admin', 'premium']), async (req, res) => {
+    try {
+     const { user } = req.session
+     res.render ('deleteProduct', {
+        user,
+        style:'style.css'})   
+    } catch (error) {
+        req.logger.error ('Error al borrar productos:', error)
+        res.status(500).json({ error: 'Internal Server Error' })
+    }
 })
     
 module.exports = router

@@ -1,40 +1,30 @@
 function submitForm() {
     // Recopila los datos del formulario en un objeto
 
-    const formData = {
-        title: document.getElementById('title').value,
-        description: document.getElementById('description').value,
-        category: document.getElementById('category').value,
-        price: document.getElementById('price').value,
-        thumbnail: document.getElementById('thumbnail').value,
-        code: document.getElementById('code').value,
-        stock: document.getElementById('stock').value,
-    }
+    const id = document.getElementById('id').value
 
     // Realiza una solicitud POST utilizando fetch y envía los datos en formato JSON
-    fetch('/api/products', {
-        method: 'POST',
+    fetch(`/api/products/${id}`, {
+        method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
     })
     .then(response => response.json())
     .then(responseData => {
         if (responseData.status === 'Success') { // Verifica si devuelve success
             Swal.fire({
                 icon: "success",
-                title: "Producto creado correctamente",
+                title: "Producto Borrado Correctamente",
               })
         } else {
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: "Error al crear el producto",
+                text: "Error al borrar el producto",
               })
         }
     })
     .catch(error => console.error('Error:', error))
 }
-
 

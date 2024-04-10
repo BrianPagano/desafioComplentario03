@@ -20,11 +20,11 @@
                         Precio:${{productFilter.price}} Cantidad:{{productFilter.stock}}
                     </p>
                 </div>
-                {{#if user.first_name}}
+                {{#isEqual ../user.role 'user'}}
                 <button class="botonAgregarCarrito btn btn2" data-pid="{{pid}}" data-cid="{{user.cart}}">
                     Agregar al Carrito
                 </button> 
-                {{/if}}
+                {{/isEqual}}
             </div>
     </section>
 </main>
