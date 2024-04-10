@@ -71,4 +71,16 @@ router.put('/', async (req, res) => {
     }
 })
 
+// Ruta para cambiar el rol de usuario a premium o viceversa
+router.put('/premium/:uid', async (req, res) => {
+    try {
+        const { uid } = req.params
+        await UserService.toggleUserRole(uid)
+        res.status(200).json({ status: 'success', message: 'Actualizacion de role correcta' })
+    } catch (error) {
+        req.logger.error ('Error al cambiar el role del usuario:', error)
+        res.status(500).json({ error: 'Error al cambiar el rol del usuario.' });
+    }
+})
+
 module.exports = router
